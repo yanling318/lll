@@ -1,4 +1,5 @@
-#include "library.c"
+#include <stdio.h>
+
 typedef unsigned short color_t;
 
 void init_graphics();
@@ -11,29 +12,95 @@ void draw_rect(int x1, int y1, int width, int height, color_t c);
 void fill_circle(int x, int y, int r, color_t c);
 void draw_text(int x, int y, const char *text, color_t c);
 
-int main(){
-	//Initialize the graphics library
-	init_graphics();
+int main (int argc, char** argv)
+{
+   printf("\nPress \"1\" to draw a non-filled rectangle.\n");
+   printf("Press \"2\" to draw a filled circle.\n");
+   printf("Press \"3\" to display a string.\n");
+   printf("**Select shape. Use the \"WASD\" keys to move the shape around.\n");
+   printf("**Press the \"q\" at any point to termiante the program.\n");
 
-	//Draw 3 rectangles and 1 pixel instantly
-	draw_rect(100, 100, 50, 100, 10); //red
-	draw_rect(150, 100, 50, 50,15); //blue-ish
-	draw_rect(0, 0, 100, 100,60); //white
-	draw_pixel(200, 250, 70); //green
+   char key;
+   int x = (640-20)/2;
+   int y = (480-20)/2;
+   int choice;
+   scanf("%d", &choice);
 
-	sleep_ms(5000); //test the sleep function
-	draw_rect(-150, 300, 80000, 300, 40); //yellow-ish rectangle mostly off-screen; almost looks like a line
+   /**
+   * Draw a non-filled rectangle.
+   * Move around with 'WASD' keys.
+   * Terminate with 'q' key.
+   */
+   {
+   if(choice == 1)
+      init_graphics();
+      clear_screen();
+      draw_rect(x, y, 200, 100, 20);
+      do
+      {
+         key = getkey();
+         if(key == 'w') y-=10;
+         else if(key == 's') y+=10;
+         else if(key == 'a') x-=10;
+         else if(key == 'd') x+=10;
+         clear_screen();
+         draw_rect(x, y, 200, 100, 20);
+         sleep_ms(20);
+      } while(key != 'q');
+      clear_screen();
+      exit_graphics();
+   }
 
-	sleep_ms(5000);
-	clear_screen(); //test the function that clears the screen
-	sleep_ms(2000);
+   /**
+   * Draw a filled circle with the midpoint circle algorithm.
+   * Move around with 'WASD' keys.
+   * Terminate with 'q' key.
+   */
+   if(choice == 2)
+   {
+      init_graphics();
+      clear_screen();
+      fill_circle(x, y, 75, 20);
+      do
+      {
+         key = getkey();
+         if(key == 'w') y-=10;
+         else if(key == 's') y+=10;
+         else if(key == 'a') x-=10;
+         else if(key == 'd') x+=10;
+         clear_screen();
+         fill_circle(x, y, 75, 20);
+         sleep_ms(20);
+      } while(key != 'q');
+         clear_screen();
+         exit_graphics();
+   }
 
-	draw_rect(300, 300, 100, 50,70); //maroon/brown/purple
-	sleep_ms(1000);
-	draw_rect(100, 150, 200, 200, 40); //yellow/gold
-	sleep_ms(500);
+   /**
+   * Write a string usign the iso_font.h header file.
+   * Move around with 'WASD' keys.
+   * Terminate with 'q' key.
+   */
+   if(choice == 3)
+   {
+      const char *text_input = "Hello World!";
+      init_graphics();
+      clear_screen();
+      draw_text(x, y, text_input, 20);
+   do
+   {
+      key = getkey();
+      if(key == 'w') x-=10;
+      else if(key == 's') x+=10;
+      else if(key == 'a') y-=10;
+      else if(key == 'd') y+=10;
+      clear_screen();
+      draw_text(x, y, text_input, 20);
+      sleep_ms(20);
+   } while(key != 'q');
+      clear_screen();
+      exit_graphics();
+   }
 
-	//test a 500ms interval between text, centered in large rectang
-
-	exit_graphics(); //restore default settings and exit from graphics library
+   return 0;
 }
