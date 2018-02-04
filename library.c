@@ -115,37 +115,33 @@ void draw_rect(int x1, int y1, int width, int height, color_t c)
 }
 
 
-void draw_circle(int x, int y, int r, color_t c)
-{
-    int i;
-    for (i = r; i > 0; i--)
-    {
-        int xx = i;
-        int yy = 0;
-        int x0 = x;
-        int y0 = y;
-        int b = 1 - xx;
-   
-        while (yy <= xx)
-        {
-            draw_pixel( xx+x0, yy+y0, c);
-            draw_pixel( yy+x0, xx+y0, c);
-            draw_pixel( -xx+x0, yy+y0, c);
-            draw_pixel( -yy+x0, xx+y0, c);
-            draw_pixel( -xx+x0, -yy+y0, c);
-            draw_pixel( -yy+x0, -xx+y0, c);
-            draw_pixel( xx+x0, -yy+y0, c);
-            draw_pixel( yy+x0, -xx+y0, c);
-            yy++;
-            if (b <= 0)
-            {
-                b += 2 * yy + 1;
-            }
-            else
-            {
-                xx--;
-                b+= 2 * (yy - xx) +1;
-            }
+void draw_circle(int x0, int y0, int r, color_t c){
+    while(r>0){ 
+    int x = r;
+    int y = 0;
+    int b = 1-x;
+    
+    while(y<=x){
+        draw_pixel(  x+x0,  y+y0, c);
+        draw_pixel(  y+x0,  x+y0, c);
+        draw_pixel( -x+x0,  y+y0, c);
+        draw_pixel( -y+x0,  x+y0, c);
+        draw_pixel( -x+x0, -y+y0, c);
+        draw_pixel( -y+x0, -x+y0, c);
+        draw_pixel(  x+x0, -y+y0, c);
+        draw_pixel(  y+x0, -x+y0, c);
+        y++;
+        if(b<=0){
+            b+= 2 * y + 1;
         }
+        else{
+            x--;
+            b += 2 * (y-x) + 1;
+        }
+    }
+    r--;
+    }
+    if(r==0){
+        draw_pixel(x0,y0,c);
     }
 }
