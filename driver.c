@@ -33,7 +33,7 @@ int main (int argc, char** argv)
    */
    
    if(choice == 1)
-      init_graphics();
+   {  init_graphics();
       clear_screen();
       draw_rect(x, y, 200, 100, 20);
       do
@@ -49,7 +49,7 @@ int main (int argc, char** argv)
       } while(key != 'q');
       clear_screen();
       exit_graphics();
-   
+   }
 
    /**
    * Draw a filled circle with the midpoint circle algorithm.
