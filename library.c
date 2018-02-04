@@ -182,45 +182,37 @@ void draw_rect(int x1, int y1, int width, int height, color_t c)
  * Use the midpoint circle algorithm to draw a circle at (x, y)
  * with radius r filled in with the specified color.
  */
-void fill_circle(int x, int y, int r, color_t c)
-{
-   /**
-    * The mid point circle algorithm only draws the circumference
-    * of a circle given a length of the radius, r. So we modify the
-    * algorithm to run multiple times while iterating over the radius
-    * length decreasing the radius length by 1 on every iteration.
-    */
-   int i;
-   for (i = r; i > 0; i--)
-   {
-      int xx = i;
-      int yy = 0;
-      int x0 = x;
-      int y0 = y;
-      int decision_over_2 = 1 - xx;
-      /* Draw the circumference of the circle for radius length, r. */
-      while (yy <= xx)
-      {
-         draw_pixel( xx+x0, yy+y0, c);
-         draw_pixel( yy+x0, xx+y0, c);
-         draw_pixel( -xx+x0, yy+y0, c);
-         draw_pixel( -yy+x0, xx+y0, c);
-         draw_pixel( -xx+x0, -yy+y0, c);
-         draw_pixel( -yy+x0, -xx+y0, c);
-         draw_pixel( xx+x0, -yy+y0, c);
-         draw_pixel( yy+x0, -xx+y0, c);
-         yy++;
-         if (decision_over_2 <= 0)
-         {
-            decision_over_2 += 2 * yy + 1;
-         }
-         else
-         {
-            xx--;
-            decision_over_2 += 2 * (yy - xx) +1;
-         }
-      }
-   }
+void fill_circle(int x0, int y0, int r, color_t c){
+
+    
+    while(r>0){  /* keep making smaller circles, until its full */
+    int x = r;
+    int y = 0;
+    int decision_over_2 = 1-x;
+    
+    while(y<=x){
+        draw_pixel(  x+x0,  y+y0, c);
+        draw_pixel(  y+x0,  x+y0, c);
+        draw_pixel( -x+x0,  y+y0, c);
+        draw_pixel( -y+x0,  x+y0, c);
+        draw_pixel( -x+x0, -y+y0, c);
+        draw_pixel( -y+x0, -x+y0, c);
+        draw_pixel(  x+x0, -y+y0, c);
+        draw_pixel(  y+x0, -x+y0, c);
+        y++;
+        if(decision_over_2<=0){
+            decision_over_2 += 2 * y + 1;
+        }
+        else{
+            x--;
+            decision_over_2 += 2 * (y-x) + 1;
+        }
+    }
+    r--;
+    }
+    if(r==0){ /* if there is no radius it's just a point */
+        draw_pixel(x0,y0,c);
+    }
 }
 
 /**
