@@ -31,7 +31,7 @@ int main (int argc, char** argv)
    * Move around with 'WASD' keys.
    * Terminate with 'q' key.
    */
-   {
+   
    if(choice == 1)
       init_graphics();
       clear_screen();
