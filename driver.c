@@ -49,7 +49,7 @@ int main (int argc, char** argv)
       } while(key != 'q');
       clear_screen();
       exit_graphics();
-   }
+   
 
    /**
    * Draw a filled circle with the midpoint circle algorithm.
