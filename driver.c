@@ -11,10 +11,12 @@ void draw_pixel(int x, int y, color_t color);
 void draw_rect(int x1, int y1, int width, int height, color_t c);
 void fill_circle(int x, int y, int r, color_t c);
 
+
 int main (int argc, char** argv)
 {
    printf("\nPress \"1\" to draw a non-filled rectangle.\n");
    printf("Press \"2\" to draw a filled circle.\n");
+
    printf("**Select shape. Use the \"WASD\" keys to move the shape around.\n");
    printf("**Press the \"q\" at any point to termiante the program.\n");
 
@@ -74,4 +76,5 @@ int main (int argc, char** argv)
          exit_graphics();
    }
 
-
+   return 0;
+}
