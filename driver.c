@@ -16,7 +16,7 @@ int main (int argc, char** argv)
 {
    printf("\nPress \"1\" to draw a non-filled rectangle.\n");
    printf("Press \"2\" to draw a filled circle.\n");
-
+   printf("Press \"3\" to display a string.\n");
    printf("**Select shape. Use the \"WASD\" keys to move the shape around.\n");
    printf("**Press the \"q\" at any point to termiante the program.\n");
 
@@ -75,6 +75,9 @@ int main (int argc, char** argv)
          clear_screen();
          exit_graphics();
    }
+
+
+
 
    return 0;
 }
