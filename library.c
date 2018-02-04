@@ -215,18 +215,4 @@ void fill_circle(int x0, int y0, int r, color_t c){
     }
 }
 
-/**
- * Draw the string with the specified color at the starting location
- * (x, y) -- this is the upper left corner of the first letter.
- * This function simply loops over all the characters in the string.
- */
-void draw_text(int x, int y, const char *text, color_t c)
-{
-   const char *temp_ptr;
-   int offset = 0;
-   for (temp_ptr = text; *temp_ptr != '\0'; temp_ptr++)
-   {
-      draw_character(x, y+offset, c, *temp_ptr);
-      offset += 8;
-   }
 }
