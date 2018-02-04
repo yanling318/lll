@@ -177,11 +177,6 @@ void draw_rect(int x1, int y1, int width, int height, color_t c)
       }
    }
 }
-
-/**
- * Use the midpoint circle algorithm to draw a circle at (x, y)
- * with radius r filled in with the specified color.
- */
 void fill_circle(int x0, int y0, int r, color_t c){
 
     
@@ -213,6 +208,4 @@ void fill_circle(int x0, int y0, int r, color_t c){
     if(r==0){ /* if there is no radius it's just a point */
         draw_pixel(x0,y0,c);
     }
-}
-
 }
