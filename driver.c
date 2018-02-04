@@ -11,9 +11,6 @@ int main(){
 	draw_pixel(200, 250, MAKE_COLOR(0, 60, 0)); //green
 
 	sleep_ms(5000); //test the sleep function
-
-	draw_text(0, 400, "hello world!", MAKE_COLOR(31, 63, 31)); //white
-	draw_text(-100, 300, "sample text wow?!", MAKE_COLOR(15, 31, 15)); //grey text mostly to the left of the display
 	draw_rect(-150, 300, 80000, 300, MAKE_COLOR(23, 54, 1)); //yellow-ish rectangle mostly off-screen; almost looks like a line
 
 	sleep_ms(5000);
@@ -26,11 +23,6 @@ int main(){
 	sleep_ms(500);
 
 	//test a 500ms interval between text, centered in large rectangle
-	draw_text(148, 242, "this ", MAKE_COLOR(31, 0, 0)); //red
-	sleep_ms(500);
-	draw_text(188, 242, "is ", MAKE_COLOR(0, 63, 0)); //green
-	sleep_ms(500);
-	draw_text(212, 242, "cool!", MAKE_COLOR(0, 0, 31)); //blue
 
 	while(getkey() != 'c'){} //test to see if input works; basically acts as an exit for the user
 
