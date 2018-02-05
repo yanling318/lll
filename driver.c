@@ -1,65 +1,56 @@
-#include<stdio.h>
-#include"library.c"
-#define BLUE  30
-#define GREEN 2016
-#define RED   63488
-int main(void){
-printf("start\n");
-sleep_ms(1500);
-clear_screen();
+#include <stdio.h>
+#include "library.c"
+typedef unsigned short color_t;
 
-init_graphics();
-int i=0;
-for( i; i<480; i++){
-    draw_pixel(i, 50, BLUE );
-    draw_pixel(i, 60, GREEN);
-    draw_pixel(i, 70, RED  );
-}
-sleep_ms(100);
-for(i=0; i<640; i++){
-    draw_pixel(50, i, RED  );
-    draw_pixel(60, i, GREEN);
-    draw_pixel(70, i, BLUE );
-}
-sleep_ms(250);
-
-draw_rect(100,100,30,30, RED  );
-sleep_ms(250);
-draw_rect(110,110,10,10, GREEN);
-sleep_ms(250);
-draw_rect( 90, 90,50,50, BLUE );
-
-sleep_ms(1000);
-
-fill_circle(200,200, 50, BLUE);
-
-draw_rect(150,150,100,100,RED);
-
-sleep_ms(250);
-fill_circle(200,200,20,GREEN);
-
-sleep_ms(250);
-fill_circle(400,200,10, GREEN);
-
-clear_screen();
-int q=0;
-int z=0;
-while(getkey()==NULL&&q<600){
-    for(q=0; q<480; q++){
-        draw_pixel(q,z,GREEN);
+int main (int argc, char** argv)
+{
+    printf("Press keys \"rentangle\" to draw a unfill rectangle.\n");
+    printf("Press keys \"circle\" to draw a filled circle.\n");
+    printf("Press the \"q\" to quit the program.\n");
+    printf("use \"WASD\" keys to move the shape around.\n");
+    char key;
+    int x = (640-20)/2;
+    int y = (480-20)/2;
+    int choice;
+    scanf("%d", &choice);
+ 
+    if(choice == "rentangle")
+    {  init_graphics();
+        clear_screen();
+        draw_rect(x, y, 200, 100, 20);
+        do
+        {
+            key = getkey();
+            if(key == 'w') y-=10;
+            else if(key == 's') y+=10;
+            else if(key == 'a') x-=10;
+            else if(key == 'd') x+=10;
+            clear_screen();
+            draw_rect(x, y, 200, 100, 20);
+            sleep_ms(20);
+        } while(key != 'q');
+        clear_screen();
+        exit_graphics();
     }
-    z++;
-    sleep_ms(100);
-}
-clear_screen();
-
-draw_text(10,10, "Testing writing text", RED);
-draw_text(50,10, "This is BLUE", BLUE);
-sleep_ms(250);
-exit_graphics();
-
-printf("done\n");
-
-return 0;
-
+    
+    if(choice == 'circle')
+    {
+        init_graphics();
+        clear_screen();
+        draw_circle(x, y, 75, 20);
+        do
+        {
+            key = getkey();
+            if(key == 'w') y-=10;
+            else if(key == 's') y+=10;
+            else if(key == 'a') x-=10;
+            else if(key == 'd') x+=10;
+            clear_screen();
+            draw_circle(x, y, 75, 20);
+            sleep_ms(20);
+        } while(key != 'q');
+        clear_screen();
+        exit_graphics();
+    }
+    return 0;
 }
