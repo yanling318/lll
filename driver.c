@@ -69,27 +69,11 @@ int main (int argc, char** argv)
     {
         init_graphics();
         clear_screen();
-        draw_rect(100,100,30,30, RED  );
-        sleep_ms(250);
-        draw_rect(110,110,10,10, GREEN);
-        sleep_ms(250);
-        draw_rect( 90, 90,50,50, BLUE );
-        
-        sleep_ms(1000);
-        
-        draw_circle(200,200, 50, BLUE);
-        
-        draw_rect(150,150,100,100,RED);
-        
-        sleep_ms(250);
-        draw_circle(200,200,20,GREEN);
-        
-        sleep_ms(250);
-        draw_circle(400,200,10, GREEN);
-        key = getkey();
-        if (key == 'q') {
-            clear_screen();
-            exit_graphics();
+       for(i=0; i<640; i++){
+    draw_pixel(50, i, RED  );
+    draw_pixel(60, i, GREEN);
+    draw_pixel(70, i, BLUE );
+}
         }
     }
     return 0;
