@@ -1,125 +1,143 @@
-#include <sys/stat.h>
-#include <sys/mman.h>
-#include <sys/ioctl.h>
-#include <sys/types.h>
-#include <linux/fb.h>
-#include <fcntl.h>
-#include <termios.h>
-#include <unistd.h>
+#include<time.h>
+#include<linux/fb.h>
+#include<sys/ioctl.h>
+#include<termios.h>
+#include<fcntl.h>
+#include<sys/stat.h>
+#include<sys/mman.h>
+#include<stdint.h>
+#include"iso_font.h"
 
-int op;
-unsigned short *fb_ptr;
-unsigned long size;
-unsigned long x_len;
-unsigned long y_len;
-typedef unsigned short color_t;
-void init_graphics();
-void exit_graphics();
-void clear_screen();
-char getkey();
-void sleep_ms(long ms);
-void draw_pixel(int x, int y, color_t color);
-void draw_rect(int x1, int y1, int width, int height, color_t c);
-void draw_circle(int x, int y, int r, color_t c);
+typedef uint16_t color_t;
 
-void init_graphics()
-{
-    struct fb_var_screeninfo var_info;
-    struct fb_fix_screeninfo fix_info;
-    struct termios term;
-     op = open("/dev/fb0", O_RDWR);
-    ioctl(op, FBIOGET_VSCREENINFO, &var_info);
-    ioctl(op, FBIOGET_FSCREENINFO, &fix_info);
-    x_len = var_info.xres_virtual;
-    y_len = var_info.yres_virtual;
-    size = fix_info.line_length;
-    fb_ptr = (unsigned short *)mmap(NULL, x_len * size,
-                                    PROT_WRITE, MAP_SHARED, op, 0);
-    ioctl(STDIN_FILENO, TCGETS, &term);
-    term.c_lflag &= ~ICANON;
-    term.c_lflag &= ~ECHO;
-    ioctl(STDIN_FILENO, TCSETS, &term);
+void * graphics_map;
+int graphics_fd;
+struct fb_fix_screeninfo fixed;
+struct fb_var_screeninfo var;
+struct termios term;
+
+void init_graphics(){
+
+    /* get the file discripter for the framebuffer*/
+    graphics_fd = open("/dev/fb0", O_RDWR);
+
+    /*find out what kind of screen we're using*/
+    ioctl(graphics_fd, FBIOGET_VSCREENINFO, &var);
+    ioctl(graphics_fd, FBIOGET_FSCREENINFO, &fixed);
+
+    /*find out how big that screen really is*/
+    int mmsize = fixed.line_length * var.yres;
+
+    /*mmap the frame buffer*/
+    graphics_map = mmap(NULL, mmsize , PROT_READ | PROT_WRITE,
+      MAP_SHARED, graphics_fd, 0  );
+
+    /*now to deal with that pesky terminal*/
+    ioctl(0,TCGETS,&term);
+    struct termios new_term;
+    new_term = term;
+    new_term.c_lflag&=~ECHO;
+    new_term.c_lflag&=~ICANON;
+    ioctl(0,TCSETS,&new_term);
+    /*
+     * I thought here would be a good place to call clear
+     * but the TA said otherwise
+     */
 }
 
-void exit_graphics()
-{
-    munmap(fb_ptr, y_len * size);
-    struct termios term;
-    ioctl(STDIN_FILENO, TCGETS, &term);
-    term.c_lflag |= ICANON;
-    term.c_lflag |= ECHO;
-    ioctl(STDIN_FILENO, TCSETS, &term);
-    close(op);
+void exit_graphics(){
+    /*Let's leave things how we found them*/
+    munmap(graphics_map, 0); //unmap the mmap
+    close(graphics_fd);      //close the fd
+
+    /* and fix that terminal */
+    ioctl(0,TCSETS, &term);
 }
 
-void clear_screen()
-{
-    write(1, "\033[2J", 8);
+void clear_screen(){
+    //this works, but is 7 right?
+    write(1, "\033[2J",7);
 }
 
-char getkey()
-{
-    char input_key;
-    fd_set a;
-    struct timeval c;
-    FD_ZERO(&a);
-    FD_SET(0, &a);
-    c.tv_sec = 5;
-    c.tv_usec = 0;
-    int select_r = select(STDIN_FILENO+1, &a, NULL, NULL, &c);
-    if (select_r > 0)
-    {
-        read(0, &input_key, sizeof(input_key));
+char getkey(){
+    /* get key will return null if nothing is ready to read */
+    struct timeval time = { 0L, 0L};
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(0, &fds);
+    int val=0;
+    val=select(1, &fds, NULL, NULL, &time);
+
+    if(val>0){ /* we can read */
+        char input;
+        read(0, &input, sizeof(input));
+        return input;
     }
-    return input_key;
-}
-
-void sleep_ms(long ms)
-{
-    struct timespec t;
-    t.tv_sec = 0;
-    t.tv_nsec = ms * 1000000;
-    nanosleep(&t, NULL);
-}
-
-void draw_pixel(int x, int y, color_t color)
-{
-    if (x < 0 || x >= x_len || y < 0 || y >= y_len)
-    {
-        return;
+    else{ /* not ready yet */
+        return NULL;
     }
-    unsigned long v = (size/2) * y;
-    unsigned long h = x;
-    unsigned short *ptr = ( fb_ptr + v + h);
-    *ptr = color;
+
+
 }
 
+void sleep_ms(long ms){
+    struct timespec time;
+    time.tv_sec=ms/1000;
+    time.tv_nsec=(ms%1000)*1000000;
+    nanosleep(&time, NULL);
+}
 
-void draw_rect(int x1, int y1, int width, int height, color_t c)
-{
-    int x, y;
-    for (x = x1; x < x1+width; x++)
-    {
-        for (y = y1; y < y1+height; y++)
-        {
-            if (x == x1 || x == x1+width-1)
-            {
-                draw_pixel(x, y, c);
-            }
-            if (y == y1 || y == y1+height-1)
-            {
-                draw_pixel(x, y, c);
-            }
+void draw_pixel(int x, int y, color_t color){
+
+    int loc = x * fixed.line_length + y*2;
+    color_t* pixel = (graphics_map + loc);
+    *pixel = color;
+
+}
+
+void draw_rect(int x, int y, int width, int height, color_t c){
+    int i;
+    for(i=x; i<x+width; i++){
+        draw_pixel(y, i, c);
+        draw_pixel(y+height, i, c);
+    }
+
+    for(i=y; i<=y+height; i++){
+        draw_pixel(i, x, c);
+        draw_pixel(i, x+width, c);
+    }
+}
+
+void draw_text(int x, int y, const char* text, color_t c){
+    //TODO
+
+    int n=0;
+    char t = text[n];
+    while(t!='\0'){ /* iterate over the whole string */
+
+    int i;
+    for(i=0; i<16; i++){
+        unsigned char byte = iso_font[ 16 * text[n] + i];
+        int j;
+        int k=0;
+        for(j=1; j<=128; j*=2){
+            if(byte&j)
+                draw_pixel(x+i, y+k, c);
+            k++;
         }
     }
+    t = text[++n];
+    y+=8;
+    }
 }
 
+void fill_circle(int x0, int y0, int r, color_t c){
 
-void draw_circle(int x0, int y0, int r, color_t c){
-    while(r>0){ 
+    
+    while(r>0){  /* keep making smaller circles, until its full */
     int x = r;
     int y = 0;
-    int b = 1-x;
+    int decision_over_2 = 1-x;
     
     while(y<=x){
         draw_pixel(  x+x0,  y+y0, c);
@@ -131,17 +149,17 @@ void draw_circle(int x0, int y0, int r, color_t c){
         draw_pixel(  x+x0, -y+y0, c);
         draw_pixel(  y+x0, -x+y0, c);
         y++;
-        if(b<=0){
-            b+= 2 * y + 1;
+        if(decision_over_2<=0){
+            decision_over_2 += 2 * y + 1;
         }
         else{
             x--;
-            b += 2 * (y-x) + 1;
+            decision_over_2 += 2 * (y-x) + 1;
         }
     }
     r--;
     }
-    if(r==0){
+    if(r==0){ /* if there is no radius it's just a point */
         draw_pixel(x0,y0,c);
     }
 }
