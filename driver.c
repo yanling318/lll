@@ -69,12 +69,12 @@ int main (int argc, char** argv)
     {
         init_graphics();
         clear_screen();
-       for(i=0; i<640; i++){
-    draw_pixel(50, i, RED  );
-    draw_pixel(60, i, GREEN);
-    draw_pixel(70, i, BLUE );
+int i=0;
+for( i; i<480; i++){
+    draw_pixel(i, 50, BLUE );
+    draw_pixel(i, 60, GREEN);
+    draw_pixel(i, 70, RED  );
 }
-        }
     }
     return 0;
 }
