@@ -18,6 +18,7 @@ int main (int argc, char** argv)
 {
     printf("Press key \"1\" to draw a unfill blue rectangle.\n");
     printf("Press key \"2\" to draw a filled blue circle.\n");
+     printf("Press key \"3\" to draw three color line.\n");
     printf("Press key \"q\" to quit the program.\n");
     printf("use \"WASD\" keys to move the shape around.\n");
     char key;
