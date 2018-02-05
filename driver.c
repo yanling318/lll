@@ -90,7 +90,6 @@ int main (int argc, char** argv)
         if (key == 'q') {
             clear_screen();
             exit_graphics();
-            <#statements#>
         }
     }
     return 0;
