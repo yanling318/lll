@@ -40,15 +40,15 @@ draw_rect( 90, 90,50,50, BLUE );
 
 sleep_ms(1000);
 
-fill_circle(200,200, 50, BLUE);
+draw_circle(200,200, 50, BLUE);
 
 draw_rect(150,150,100,100,RED);
 
 sleep_ms(250);
-fill_circle(200,200,20,GREEN);
+draw_circle(200,200,20,GREEN);
 
 sleep_ms(250);
-fill_circle(400,200,10, GREEN);
+draw_circle(400,200,10, GREEN);
 
 clear_screen();
 int q=0;
