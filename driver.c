@@ -29,7 +29,7 @@ int main (int argc, char** argv)
     if(choice == 1)
     {  init_graphics();
         clear_screen();
-        draw_rect(x, y, 200, 100, 60);
+        draw_rect(x, y, 200, 100, RED);
         do
         {
             key = getkey();
@@ -38,7 +38,7 @@ int main (int argc, char** argv)
             else if(key == 'a') x-=10;
             else if(key == 'd') x+=10;
             clear_screen();
-            draw_rect(x, y, 200, 100, 60);
+            draw_rect(x, y, 200, 100, RED);
             sleep_ms(20);
         } while(key != 'q');
         clear_screen();
@@ -49,7 +49,7 @@ int main (int argc, char** argv)
     {
         init_graphics();
         clear_screen();
-        draw_circle(x, y, 75, 80);
+        draw_circle(x, y, 75, GREEN);
         do
         {
             key = getkey();
@@ -58,7 +58,7 @@ int main (int argc, char** argv)
             else if(key == 'a') x-=10;
             else if(key == 'd') x+=10;
             clear_screen();
-            draw_circle(x, y, 75, 80);
+            draw_circle(x, y, 75, GREEN);
             sleep_ms(20);
         } while(key != 'q');
         clear_screen();
@@ -72,8 +72,8 @@ int main (int argc, char** argv)
 int i=0;
 for( i; i<480; i++){
     draw_pixel(i, 50, BLUE );
-    draw_pixel(i, 60, GREEN);
-    draw_pixel(i, 70, RED  );
+    draw_pixel(i, 100, GREEN);
+    draw_pixel(i, 150, RED  );
 }
     }
     return 0;
