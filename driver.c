@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 
 typedef unsigned short color_t;
@@ -16,9 +17,9 @@ void draw_circle(int x, int y, int r, color_t c);
 
 int main (int argc, char** argv)
 {
-    printf("Press key \"1\" to draw a unfill blue rectangle.\n");
-    printf("Press key \"2\" to draw a filled blue circle.\n");
-     printf("Press key \"3\" to draw three color line.\n");
+    printf("Press key \"1\" to draw a unfill red rectangle.\n");
+    printf("Press key \"2\" to draw a filled green circle.\n");
+    printf("Press key \"3\" to draw three color line.\n");
     printf("Press key \"q\" to quit the program.\n");
     printf("use \"WASD\" keys to move the shape around.\n");
     char key;
@@ -26,7 +27,7 @@ int main (int argc, char** argv)
     int y = (480-20)/2;
     int choice;
     scanf("%d", &choice);
- 
+    
     if(choice == 1)
     {  init_graphics();
         clear_screen();
@@ -70,12 +71,12 @@ int main (int argc, char** argv)
     {
         init_graphics();
         clear_screen();
-int i=0;
-for( i; i<480; i++){
-    draw_pixel(i, 50, BLUE );
-    draw_pixel(i, 100, GREEN);
-    draw_pixel(i, 150, RED  );
-}
+        int i=0;
+        for( i; i<480; i++){
+            draw_pixel(i, 50, BLUE );
+            draw_pixel(i, 100, GREEN);
+            draw_pixel(i, 150, RED  );
+        }
     }
     return 0;
 }
