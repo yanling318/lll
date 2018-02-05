@@ -14,9 +14,9 @@ void draw_circle(int x, int y, int r, color_t c);
 
 int main (int argc, char** argv)
 {
-    printf("Press \"1\" to draw a non-filled rectangle.\n");
-    printf("Press \"2\" to draw a filled circle.\n");
-    printf("Press the \"q\" to quit the program.\n");
+    printf("Press key \"1\" to draw a unfill blue rectangle.\n");
+    printf("Press key \"2\" to draw a filled blue circle.\n");
+    printf("Press key \"q\" to quit the program.\n");
     printf("use \"WASD\" keys to move the shape around.\n");
     char key;
     int x = (640-20)/2;
@@ -27,7 +27,7 @@ int main (int argc, char** argv)
     if(choice == 1)
     {  init_graphics();
         clear_screen();
-        draw_rect(x, y, 200, 100, 20);
+        draw_rect(x, y, 200, 100, 60);
         do
         {
             key = getkey();
@@ -36,7 +36,7 @@ int main (int argc, char** argv)
             else if(key == 'a') x-=10;
             else if(key == 'd') x+=10;
             clear_screen();
-            draw_rect(x, y, 200, 100, 20);
+            draw_rect(x, y, 200, 100, 60);
             sleep_ms(20);
         } while(key != 'q');
         clear_screen();
@@ -47,7 +47,7 @@ int main (int argc, char** argv)
     {
         init_graphics();
         clear_screen();
-        draw_circle(x, y, 75, 20);
+        draw_circle(x, y, 75, 80);
         do
         {
             key = getkey();
@@ -56,7 +56,7 @@ int main (int argc, char** argv)
             else if(key == 'a') x-=10;
             else if(key == 'd') x+=10;
             clear_screen();
-            draw_circle(x, y, 75, 20);
+            draw_circle(x, y, 75, 80);
             sleep_ms(20);
         } while(key != 'q');
         clear_screen();
